@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -40,7 +41,7 @@ export default function Login() {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>Welcome back!</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -74,6 +75,12 @@ export default function Login() {
             <Button type="submit" className="mt-6">
               Login
             </Button>
+            <div className="mt-3">
+              Not account yet?{" "}
+              <Link href="/register" className="underline hover:opacity-80">
+                Register
+              </Link>
+            </div>
           </form>
         </Form>
       </CardContent>

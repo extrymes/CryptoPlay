@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -51,7 +52,7 @@ export default function Register() {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <CardTitle>Create account</CardTitle>
+        <CardTitle>Create an account</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -99,6 +100,12 @@ export default function Register() {
             <Button type="submit" className="mt-6">
               Create
             </Button>
+            <div className="mt-3">
+              Already have an account?{" "}
+              <Link href="/login" className="underline hover:opacity-80">
+                Login
+              </Link>
+            </div>
           </form>
         </Form>
       </CardContent>
