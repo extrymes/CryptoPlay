@@ -15,7 +15,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     setIsMounted(true);
-  });
+  }, []);
 
   if (!isMounted) return null;
   return (
