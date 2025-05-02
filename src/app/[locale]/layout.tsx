@@ -1,4 +1,5 @@
 import ThemeProvider from "@/components/theme-provider";
+import { I18nProviderClient } from "@/locales/client";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -9,20 +10,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: {
+    locale: string;
+  };
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <I18nProviderClient locale={params.locale}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </I18nProviderClient>
       </body>
     </html>
   );

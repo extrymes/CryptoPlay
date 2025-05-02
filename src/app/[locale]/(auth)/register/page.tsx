@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/locales/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -36,6 +37,8 @@ const formSchema = z.object({
 });
 
 export default function Register() {
+  const t = useI18n();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +55,7 @@ export default function Register() {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
+        <CardTitle>{t("register.createAnAccount")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -62,11 +65,13 @@ export default function Register() {
               name="username"
               render={({ field }) => (
                 <FormItem className="mb-3">
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>{t("register.username")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>This is your display name.</FormDescription>
+                  <FormDescription>
+                    {t("register.usernameDescription")}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -76,9 +81,12 @@ export default function Register() {
               name="email"
               render={({ field }) => (
                 <FormItem className="mb-3">
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("register.email")}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="example@gmail.com" />
+                    <Input
+                      {...field}
+                      placeholder={t("register.emailExample")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,7 +97,7 @@ export default function Register() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("register.password")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="password" />
                   </FormControl>
@@ -98,12 +106,12 @@ export default function Register() {
               )}
             />
             <Button type="submit" className="mt-6">
-              Create
+              {t("register.create")}
             </Button>
             <div className="mt-3">
-              Already have an account?{" "}
+              {t("register.alreadyHaveAnAccount")}{" "}
               <Link href="/login" className="underline hover:opacity-80">
-                Login
+                {t("register.login")}
               </Link>
             </div>
           </form>

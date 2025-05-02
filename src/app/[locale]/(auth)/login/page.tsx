@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/locales/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -26,6 +27,8 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  const t = useI18n();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,7 +44,7 @@ export default function Login() {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <CardTitle>Welcome back!</CardTitle>
+        <CardTitle>{t("login.welcomeBack")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -51,9 +54,9 @@ export default function Login() {
               name="email"
               render={({ field }) => (
                 <FormItem className="mb-3">
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("login.email")}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="example@gmail.com" />
+                    <Input {...field} placeholder={t("login.emailExample")} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -64,7 +67,7 @@ export default function Login() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("login.password")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="password" />
                   </FormControl>
@@ -73,12 +76,12 @@ export default function Login() {
               )}
             />
             <Button type="submit" className="mt-6">
-              Login
+              {t("login.login")}
             </Button>
             <div className="mt-3">
-              Not account yet?{" "}
+              {t("login.notAccountYet")}{" "}
               <Link href="/register" className="underline hover:opacity-80">
-                Register
+                {t("login.register")}
               </Link>
             </div>
           </form>
