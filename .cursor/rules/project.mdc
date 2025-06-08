@@ -1,0 +1,13 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Context
+CryptoPlay is a **simulation platform for learning crypto trading** with virtual funds.
+
+# Objectives
+- Personal wallet with virtual funds
+- Tracking & Trading crypto currencies
+- List of favorites
+- Clean user interface
