@@ -17,6 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   username: z
@@ -31,13 +33,22 @@ const formSchema = z.object({
   email: z.string().email().max(50, {
     message: "Email must be at most 50 characters.",
   }),
-  password: z.string().max(50, {
-    message: "Password must be at most 50 characters.",
-  }),
+  password: z
+    .string()
+    .min(6, {
+      message: "Password must be at least 6 characters.",
+    })
+    .max(50, {
+      message: "Password must be at most 50 characters.",
+    }),
 });
 
 export default function Register() {
   const t = useI18n();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,8 +59,39 @@ export default function Register() {
     },
   });
 
-  const onsSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+
+      if (data.success) {
+        setSuccess(true);
+        form.reset();
+
+        // Redirect to login page after successful registration
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -58,8 +100,18 @@ export default function Register() {
         <CardTitle>{t("register.createAnAccount")}</CardTitle>
       </CardHeader>
       <CardContent>
+        {error && (
+          <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-sm">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="mb-4 p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
+            Account created successfully! Redirecting to login...
+          </div>
+        )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onsSubmit)}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="username"
@@ -105,8 +157,8 @@ export default function Register() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-6">
-              {t("register.create")}
+            <Button type="submit" className="mt-6" disabled={isLoading}>
+              {isLoading ? "Creating account..." : t("register.create")}
             </Button>
             <div className="mt-3">
               {t("register.alreadyHaveAnAccount")}{" "}
